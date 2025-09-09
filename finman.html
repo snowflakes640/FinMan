@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinMan</title>
+  <style>
+    :root {
+      --primary: #f0ecfd;   /* darker purple */
+      --medium: #d0bffb;    /* medium fill */
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      color: #333;
+    }
+
+    header {
+      padding: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--medium);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+    }
+    .container {
+    width: 75%;        /* take 75% of the viewport width */
+    margin: 0 auto;    /* center horizontally */
+    height: 100%;      /* make sure it still fills the height */
+    display: flex;
+    flex-direction: column;
+  }
+
+    /* Left panel */
+    .sidebar {
+      width: 35%;
+      border-right: 1px solid #ddd;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .balance-card {
+      background: var(--primary);
+      padding: 1rem;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 0.5rem;
+      cursor: pointer;
+      background: var(--primary);
+    }
+
+    .tab.active {
+      border-bottom: 3px solid var(--medium);
+      font-weight: bold;
+      color: var(--medium);
+    }
+
+    .tab-content {
+      flex: 1;
+      background: var(--primary);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      /* background: var(--medium); */
+      border: 1px solid var(--medium);
+      border-radius: 8px;
+    }
+
+    .list-item span {
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+    }
+
+    .list-item span::before {
+      /* content: "A"; */
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 24px;
+    }
+
+    .amount {
+      /* font-weight: bold; */
+      color: #333;
+    }
+
+    /* Chat section */
+    .chat-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1rem;
+    }
+
+    .chat-history {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      background: #fafafa;
+    }
+
+    .message {
+      margin: 0.5rem 0;
+      padding: 0.5rem 0.8rem;
+      border-radius: 8px;
+      max-width: 70%;
+      word-wrap: break-word;
+    }
+
+    .message.user {
+      background: var(--primary);
+      color: #222;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .message.agent {
+      background: var(--medium);
+      color: #222;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    .chat-input {
+      display: flex;
+      align-items: center;
+      background: var(--primary);
+      border-radius: 8px;
+      padding: 0.5rem;
+    }
+
+    .chat-input input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      padding: 0.5rem;
+    }
+
+    .chat-input button {
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--primary);
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+
+    footer .icons span {
+      margin-right: 0.5rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header>FinMan</header>
+    
+    <main>
+      <!-- Left sidebar -->
+      <div class="sidebar">
+        <div class="balance-card">
+          <p>Current Balance</p>
+          <h2 id="balance"></h2>
+        </div>
+        
+        <div class="tabs">
+        <div class="tab active" data-tab="expense">Expense</div>
+        <div class="tab" data-tab="income">Income</div>
+        <div class="tab" data-tab="report">Report</div>
+      </div>
+      
+      <div class="tab-content" id="tab-content">
+        <p>Select a tab to view details</p>
+      </div>
+    </div>
+
+    <!-- Right chat section -->
+    <div class="chat-section">
+      <div class="chat-history" id="chat-history">
+        <!-- Chat messages will appear here -->
+      </div>
+      <div class="chat-input">
+        <input type="text" id="chat-input" placeholder="Type your message...">
+        <button id="send-btn">➤</button>
+      </div>
+    </div>
+  </main>
+  
+  <footer>
+    <div class="icons">
+      <span>📘</span>
+      <span>💼</span>
+      <span>▶️</span>
+      <span>📷</span>
+    </div>
+    <div>FinMan</div>
+  </footer>
+  
+  <script>
+    // Tab handling
+    const tabs = document.querySelectorAll('.tab');
+    const tabContent = document.getElementById('tab-content');
+
+    async function loadIncomes() {
+      const res = await fetch("http://127.0.0.1:8000/incomes");
+      const incomes = await res.json();
+      tabContent.innerHTML = incomes.map(
+        i => `<div class="list-item"><span>${i.category}</span><div class="amount">$${i.amount}</div></div>`
+      ).join("");
+    }
+
+    async function loadExpenses() {
+      const res = await fetch("http://127.0.0.1:8000/expenses");
+      const expenses = await res.json();
+      tabContent.innerHTML = expenses.map(
+        e => `<div class="list-item"><span>${e.category}</span><div class="amount">$${e.amount}</div></div>`
+      ).join("");
+    }
+
+    async function loadBalance() {
+      const res = await fetch("http://127.0.0.1:8000/balance");
+      const { balance } = await res.json();
+      document.getElementById("balance").textContent = `Balance: $${balance}`;
+    }
+
+    // Handle tab switching
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelector('.tab.active').classList.remove('active');
+        tab.classList.add('active');
+
+        const selected = tab.dataset.tab;
+        if (selected === 'expense') {
+          loadExpenses();
+        } else if (selected === 'income') {
+          loadIncomes();
+        } else if (selected === 'report') {
+          // Report tab just shows latest report content (already set)
+        }
+      });
+    });
+
+    // Chat handling
+    const chatHistory = document.getElementById('chat-history');
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    function addMessage(text, sender = "user") {
+      const msg = document.createElement("div");
+      msg.classList.add("message", sender);
+      msg.textContent = text;
+      chatHistory.appendChild(msg);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    async function sendChatMessage(text) {
+      const res = await fetch("http://127.0.0.1:8000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
+      });
+      const reply = await res.json();
+
+      if (reply.type === "report") {
+        // Always show report on left tab, never in chat
+        const reportTab = document.querySelector('[data-tab="report"]');
+        const isActive = reportTab.classList.contains("active");
+
+        if (reply.message) {
+          tabContent.innerHTML = `<h3>Report</h3><p>${reply.message}</p>`;
+        }
+
+        // Switch to report tab if user is not already there
+        if (!isActive) {
+          document.querySelector('.tab.active').classList.remove('active');
+          reportTab.classList.add('active');
+        }
+      } else {
+        // Normal chat flow
+        addMessage(reply.message, "agent");
+
+        if (reply.type === "data" && reply.balance !== undefined) {
+          // Update balance
+          document.getElementById("balance").textContent = `Balance: $${reply.balance}`;
+
+          // Refresh active tab
+          const activeTab = document.querySelector('.tab.active').dataset.tab;
+          if (activeTab === "income") {
+            loadIncomes();
+          } else if (activeTab === "expense") {
+            loadExpenses();
+          }
+        }
+      }
+    }
+
+    // Send button & Enter key
+    sendBtn.addEventListener("click", () => {
+      if (chatInput.value.trim() !== "") {
+        addMessage(chatInput.value, "user");
+        sendChatMessage(chatInput.value);
+        chatInput.value = "";
+      }
+    });
+
+    chatInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        sendBtn.click();
+      }
+    });
+
+    // Initial load
+    loadBalance();
+  </script>
+
+    </div>
+</body>
+</html>

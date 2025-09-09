@@ -59,29 +59,3 @@ FinMan is an intelligent personal finance management application that leverages 
 
 ---
 
-## Buzzwords
-- **Conversational AI**
-- **Automated Finance Management**
-- **Real-Time Insights**
-- **Natural Language Processing (NLP)**
-- **Personalized Financial Analytics**
-
----
-
-## License
-MIT License
-
----
-
-## Authors
-- [Your Name]
-
----
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
----
-
-## Contact
-For questions or support, please contact [your-email@example.com].

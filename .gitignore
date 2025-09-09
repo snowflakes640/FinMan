@@ -1,0 +1,14 @@
+# Ignore Python environment and secrets
+.env
+__pycache__/
+*.pyc
+
+# Ignore VS Code settings
+.vscode/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore JSON database
+finman.json
